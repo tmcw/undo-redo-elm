@@ -87,7 +87,9 @@ update msg ({ history, historyIndex } as model) =
 
 getCurrent : Model -> List Position
 getCurrent model =
-    withDefault [] (List.head (List.drop model.historyIndex model.history))
+    withDefault [] (model.history
+        |> List.drop model.historyIndex
+        |> List.head)
 
 
 
