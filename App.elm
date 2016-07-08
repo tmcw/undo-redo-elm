@@ -87,9 +87,11 @@ update msg ({ history, historyIndex } as model) =
 
 getCurrent : Model -> List Position
 getCurrent model =
-    withDefault [] (model.history
-        |> List.drop model.historyIndex
-        |> List.head)
+    withDefault []
+        (model.history
+            |> List.drop model.historyIndex
+            |> List.head
+        )
 
 
 
@@ -113,12 +115,17 @@ onClickStop : msg -> Attribute msg
 onClickStop message =
     onWithOptions "click" { stopPropagation = True, preventDefault = False } (Json.succeed message)
 
-buttonStyle : Bool -> List (String, String)
+
+buttonStyle : Bool -> List ( String, String )
 buttonStyle disabled =
     [ "border-radius" => "5px"
     , "margin" => "5px"
     , "border-width" => "0"
-    , "background" => if disabled then "#aaa" else "#2969B0"
+    , "background"
+        => if disabled then
+            "#aaa"
+           else
+            "#2969B0"
     , "color" => "#fff"
     ]
 
@@ -158,8 +165,11 @@ view model =
             )
           )
         , (button
-        [ onClick Undo
-        , style (buttonStyle (model.historyIndex == 0)) ] [ text "Undo" ])
+            [ onClick Undo
+            , style (buttonStyle (model.historyIndex == 0))
+            ]
+            [ text "Undo" ]
+          )
         , (button [ onClick Redo, style (buttonStyle (model.historyIndex == (List.length model.history) - 1)) ] [ text "Redo" ])
         ]
 
