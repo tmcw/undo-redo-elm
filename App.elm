@@ -113,6 +113,15 @@ onClickStop : msg -> Attribute msg
 onClickStop message =
     onWithOptions "click" { stopPropagation = True, preventDefault = False } (Json.succeed message)
 
+buttonStyle : Bool -> List (String, String)
+buttonStyle disabled =
+    [ "border-radius" => "5px"
+    , "margin" => "5px"
+    , "border-width" => "0"
+    , "background" => if disabled then "#aaa" else "#2969B0"
+    , "color" => "#fff"
+    ]
+
 
 view : Model -> Html Msg
 view model =
@@ -121,8 +130,8 @@ view model =
             [ onAdd
             , style
                 [ "background-color" => "#eeeeee"
-                , "width" => "800px"
-                , "height" => "400px"
+                , "width" => "600px"
+                , "height" => "200px"
                 ]
             ]
             (List.map
@@ -130,7 +139,7 @@ view model =
                     (div
                         [ (onClickStop (RemoveDot dot))
                         , style
-                            [ "background-color" => "#000000"
+                            [ "background-color" => "#EB6B56"
                             , "cursor" => "move"
                             , "width" => "20px"
                             , "height" => "20px"
@@ -148,9 +157,10 @@ view model =
                 (getCurrent model)
             )
           )
-        , (text ("index:" ++ toString model.historyIndex))
-        , (button [ onClick Undo ] [ text "Undo" ])
-        , (button [ onClick Redo ] [ text "Redo" ])
+        , (button
+        [ onClick Undo
+        , style (buttonStyle (model.historyIndex == 0)) ] [ text "Undo" ])
+        , (button [ onClick Redo, style (buttonStyle (model.historyIndex == (List.length model.history) - 1)) ] [ text "Redo" ])
         ]
 
 
