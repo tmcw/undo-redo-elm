@@ -1,7 +1,7 @@
 import Html exposing (..)
 import Html.App as Html
 import Html.Attributes exposing (..)
-import Html.Events exposing (on, onClick)
+import Html.Events exposing (on, onClick, onWithOptions)
 import Json.Decode as Json exposing ((:=))
 import Mouse exposing (Position)
 
@@ -83,6 +83,11 @@ subscriptions model =
 (=>) = (,)
 
 
+onClickStop : msg -> Attribute msg
+onClickStop message =
+  onWithOptions "click" { stopPropagation = True, preventDefault = False } (Json.succeed message)
+
+
 view : Model -> Html Msg
 view model =
   div []
@@ -98,7 +103,7 @@ view model =
       (List.map
       (\dot -> (div
           [
-            (onClick (RemoveDot dot)),
+            (onClickStop (RemoveDot dot)),
             style
               [ "background-color" => "#000000"
               , "cursor" => "move"
