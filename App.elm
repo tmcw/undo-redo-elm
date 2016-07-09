@@ -44,31 +44,24 @@ type Msg
     | Redo
 
 
+nextModel : Model -> List Position -> ( Model, Cmd Msg )
+nextModel model next =
+    ( { model
+        | history = (List.take (model.historyIndex + 1) model.history) ++ [ next ]
+        , historyIndex = model.historyIndex + 1
+      }
+    , Cmd.none
+    )
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg ({ history, historyIndex } as model) =
     case msg of
         Click xy ->
-            ( { model
-                | history = (List.take (historyIndex + 1) history) ++ [ (getCurrent model) ++ [ xy ] ]
-                , historyIndex = historyIndex + 1
-              }
-            , Cmd.none
-            )
+            nextModel model ((getCurrent model) ++ [ xy ])
 
         RemoveDot xy ->
-            ( { model
-                | history =
-                    (List.take
-                        (historyIndex + 1)
-                        history
-                    )
-                        ++ [ List.filter ((/=) xy)
-                                (getCurrent model)
-                           ]
-                , historyIndex = historyIndex + 1
-              }
-            , Cmd.none
-            )
+            nextModel model (List.filter ((/=) xy) (getCurrent model))
 
         Undo ->
             ( { model
