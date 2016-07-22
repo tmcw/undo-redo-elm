@@ -115,10 +115,12 @@ buttonStyle disabled =
     , "margin" => "5px"
     , "border-width" => "0"
     , "background"
-        => if disabled then
-            "#aaa"
-           else
-            "#2969B0"
+        => case disabled of
+            True ->
+                "#aaa"
+
+            False ->
+                "#2969B0"
     , "color" => "#fff"
     ]
 
